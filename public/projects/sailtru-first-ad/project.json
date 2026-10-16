@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "id": "sailtru-first-ad",
+  "title": "SailTru first ad — generated plate look test",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "brand": {
+    "paper": "#F3F1EB",
+    "ink": "#141414",
+    "accent": "#3B63FF",
+    "headlineFont": "instrument-serif",
+    "bodyFont": "ibm-plex-sans",
+    "logoAssetId": null
+  },
+  "safeArea": {
+    "top": 160,
+    "bottom": 220,
+    "left": 80,
+    "right": 80
+  },
+  "assets": [
+    {
+      "id": "plate-still",
+      "kind": "image",
+      "src": "assets/plate-still.jpg",
+      "originalName": "sailtru-opener-plate.jpg",
+      "width": 720,
+      "height": 1280,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T01:11:59.248Z"
+    },
+    {
+      "id": "plate-connect",
+      "kind": "image",
+      "src": "assets/plate-connect.jpg",
+      "originalName": "sailtru-opener-plate-b.jpg",
+      "width": 720,
+      "height": 1280,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T01:12:01.365Z"
+    },
+    {
+      "id": "connect-take-01",
+      "kind": "video",
+      "src": "assets/connect-take-01.mp4",
+      "originalName": "gen-20261016t021042z-d9b64b7d.mp4",
+      "width": 720,
+      "height": 1280,
+      "durationInSeconds": 3.041667,
+      "importedAt": "2026-10-16T02:11:49.407Z"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "problem",
+      "durationInFrames": 90,
+      "background": {
+        "type": "image",
+        "assetId": "plate-still",
+        "crop": {
+          "x": 0.5,
+          "y": 0.38,
+          "zoom": 1
+        },
+        "stillPanZoom": {
+          "fromZoom": 1,
+          "toZoom": 1.06,
+          "fromX": 0.5,
+          "fromY": 0.36,
+          "toX": 0.5,
+          "toY": 0.48
+        }
+      },
+      "contrast": {
+        "scrim": "bottom",
+        "color": "#141414",
+        "opacity": 0.38
+      },
+      "headline": {
+        "text": "Still doing this manually?",
+        "placement": {
+          "x": 0.5,
+          "y": 0.08,
+          "width": 0.82,
+          "height": 0.24,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "rise",
+        "delayFrames": 4,
+        "fontSize": 78,
+        "minFontSize": 48,
+        "lineHeight": 0.96,
+        "color": "#141414"
+      },
+      "supporting": {
+        "text": "Inquiry. Copy. Spreadsheet. Follow-up.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.8,
+          "width": 0.82,
+          "height": 0.1,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 12,
+        "fontSize": 32,
+        "minFontSize": 24,
+        "lineHeight": 1.25,
+        "color": "#FFFCFA"
+      },
+      "cta": null,
+      "showLogo": false,
+      "logoPlacement": null
+    },
+    {
+      "id": "connect",
+      "durationInFrames": 90,
+      "background": {
+        "type": "video",
+        "assetId": "connect-take-01",
+        "crop": {
+          "x": 0.5,
+          "y": 0.42,
+          "zoom": 1
+        },
+        "trimStartSeconds": 0,
+        "trimEndSeconds": 3.041667,
+        "ifShort": null,
+        "mute": true
+      },
+      "contrast": {
+        "scrim": "bottom",
+        "color": "#141414",
+        "opacity": 0.4
+      },
+      "headline": {
+        "text": "The work can connect.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.1,
+          "width": 0.82,
+          "height": 0.22,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "masked-reveal",
+        "delayFrames": 6,
+        "fontSize": 78,
+        "minFontSize": 48,
+        "lineHeight": 0.96,
+        "color": "#141414"
+      },
+      "supporting": {
+        "text": "Website intelligence, then the workflow.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.7,
+          "width": 0.82,
+          "height": 0.1,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 14,
+        "fontSize": 32,
+        "minFontSize": 24,
+        "lineHeight": 1.25,
+        "color": "#FFFCFA"
+      },
+      "cta": {
+        "text": "See SailTru",
+        "placement": {
+          "x": 0.5,
+          "y": 0.82,
+          "width": 0.7,
+          "height": 0.08,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 20,
+        "fontSize": 26,
+        "minFontSize": 22,
+        "lineHeight": 1,
+        "color": "#FFFCFA",
+        "variant": "fill"
+      },
+      "showLogo": false,
+      "logoPlacement": null
+    }
+  ],
+  "audio": null
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "example-overflow",
+  "title": "Overflow handling check",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "brand": {
+    "paper": "#F3F1EB",
+    "ink": "#141414",
+    "accent": "#3B63FF",
+    "headlineFont": "instrument-serif",
+    "bodyFont": "ibm-plex-sans",
+    "logoAssetId": null
+  },
+  "safeArea": {
+    "top": 160,
+    "bottom": 220,
+    "left": 80,
+    "right": 80
+  },
+  "assets": [],
+  "scenes": [
+    {
+      "id": "too-long",
+      "durationInFrames": 60,
+      "background": {
+        "type": "image",
+        "assetId": "plate-still",
+        "crop": {"x": 0.5, "y": 0.5, "zoom": 1},
+        "stillPanZoom": null
+      },
+      "contrast": {
+        "scrim": "full",
+        "color": "#141414",
+        "opacity": 0.35
+      },
+      "headline": {
+        "text": "This headline is intentionally far too long for a vertical frame and should wrap, shrink toward the minimum readable size, then report overflow instead of vanishing into a clip: inquiry details copied into a spreadsheet then a follow-up email then another inquiry details copied into a spreadsheet then a follow-up email again and again.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.2,
+          "width": 0.72,
+          "height": 0.12,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "none",
+        "delayFrames": 0,
+        "fontSize": 84,
+        "minFontSize": 48,
+        "lineHeight": 0.98,
+        "color": "#FFFCFA"
+      },
+      "supporting": null,
+      "cta": null,
+      "showLogo": false,
+      "logoPlacement": null
+    }
+  ],
+  "audio": null
+}

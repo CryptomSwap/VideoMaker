@@ -1,15 +1,18 @@
 {
-  "name": "VideoMaker",
+  "name": "sailtru-video",
   "version": "1.0.0",
-  "description": "My Remotion video",
+  "description": "SailTru motion samples in Remotion",
   "repository": {},
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
     "@remotion/cli": "4.0.535",
+    "@remotion/google-fonts": "4.0.535",
+    "@remotion/zod-types": "4.0.535",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "remotion": "4.0.535"
+    "remotion": "4.0.535",
+    "zod": "4.5.4"
   },
   "devDependencies": {
     "@remotion/eslint-config-flat": "4.0.535",
@@ -17,12 +20,25 @@
     "@types/web": "0.0.166",
     "eslint": "9.39.5",
     "prettier": "3.8.1",
+    "tsx": "4.23.15",
     "typescript": "5.9.3"
   },
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "test": "tsx --test tests/pipeline.test.ts tests/generation.test.ts",
+    "ad": "tsx scripts/ad.ts",
+    "ad:create": "tsx scripts/ad.ts create",
+    "ad:import": "tsx scripts/ad.ts import",
+    "ad:validate": "tsx scripts/ad.ts validate",
+    "ad:stills": "tsx scripts/ad.ts stills",
+    "ad:render": "tsx scripts/ad.ts render",
+    "ad:example": "tsx scripts/ad.ts setup-example",
+    "ad:first": "tsx scripts/ad.ts setup-first-ad",
+    "ad:generate": "tsx scripts/ad.ts generate",
+    "render": "remotion render SailTruManualWork out/sailtru-manual-work.mp4",
+    "stills": "remotion still SailTruManualWork out/review-opening.png --frame=18 && remotion still SailTruManualWork out/review-midpoint.png --frame=88 && remotion still SailTruManualWork out/review-ending.png --frame=142"
   }
 }

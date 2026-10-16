@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "id": "example-manual-loop",
+  "title": "SailTru two-scene vertical",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "brand": {
+    "paper": "#F3F1EB",
+    "ink": "#141414",
+    "accent": "#3B63FF",
+    "headlineFont": "instrument-serif",
+    "bodyFont": "ibm-plex-sans",
+    "logoAssetId": "mark-logo"
+  },
+  "safeArea": {
+    "top": 160,
+    "bottom": 220,
+    "left": 80,
+    "right": 80
+  },
+  "assets": [
+    {
+      "id": "plate-still",
+      "kind": "image",
+      "src": "assets/plate-still.png",
+      "originalName": "plate-still.png",
+      "width": 1080,
+      "height": 1920,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T00:14:07.293Z"
+    },
+    {
+      "id": "plate-video",
+      "kind": "video",
+      "src": "assets/plate-video.mp4",
+      "originalName": "plate-video.mp4",
+      "width": 1080,
+      "height": 1920,
+      "durationInSeconds": 4,
+      "importedAt": "2026-10-16T00:14:08.339Z"
+    },
+    {
+      "id": "mark-logo",
+      "kind": "logo",
+      "src": "assets/mark-logo.png",
+      "originalName": "mark-logo.png",
+      "width": 256,
+      "height": 256,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T00:14:09.363Z"
+    },
+    {
+      "id": "bed-audio",
+      "kind": "audio",
+      "src": "assets/bed-audio.wav",
+      "originalName": "bed-audio.wav",
+      "width": null,
+      "height": null,
+      "durationInSeconds": 6,
+      "importedAt": "2026-10-16T00:14:10.391Z"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "problem",
+      "durationInFrames": 90,
+      "background": {
+        "type": "image",
+        "assetId": "plate-still",
+        "crop": {
+          "x": 0.5,
+          "y": 0.42,
+          "zoom": 1
+        },
+        "stillPanZoom": {
+          "fromZoom": 1,
+          "toZoom": 1.08,
+          "fromX": 0.5,
+          "fromY": 0.46,
+          "toX": 0.5,
+          "toY": 0.4
+        }
+      },
+      "contrast": {
+        "scrim": "bottom",
+        "color": "#141414",
+        "opacity": 0.42
+      },
+      "headline": {
+        "text": "Still doing this manually?",
+        "placement": {
+          "x": 0.5,
+          "y": 0.14,
+          "width": 0.78,
+          "height": 0.28,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "rise",
+        "delayFrames": 4,
+        "fontSize": 84,
+        "minFontSize": 48,
+        "lineHeight": 0.98,
+        "color": "#141414"
+      },
+      "supporting": {
+        "text": "Inquiry. Copy. Spreadsheet. Follow-up.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.72,
+          "width": 0.78,
+          "height": 0.12,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 12,
+        "fontSize": 36,
+        "minFontSize": 28,
+        "lineHeight": 1.25,
+        "color": "#FFFCFA"
+      },
+      "cta": null,
+      "showLogo": false,
+      "logoPlacement": null
+    },
+    {
+      "id": "connect",
+      "durationInFrames": 90,
+      "background": {
+        "type": "video",
+        "assetId": "plate-video",
+        "crop": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.05
+        },
+        "trimStartSeconds": 0,
+        "trimEndSeconds": 3.5,
+        "ifShort": null,
+        "mute": true
+      },
+      "contrast": {
+        "scrim": "bottom",
+        "color": "#141414",
+        "opacity": 0.35
+      },
+      "headline": {
+        "text": "The work can connect.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.16,
+          "width": 0.78,
+          "height": 0.26,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "masked-reveal",
+        "delayFrames": 6,
+        "fontSize": 84,
+        "minFontSize": 48,
+        "lineHeight": 0.98,
+        "color": "#141414"
+      },
+      "supporting": {
+        "text": "Website intelligence, then the workflow.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.64,
+          "width": 0.78,
+          "height": 0.1,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 14,
+        "fontSize": 34,
+        "minFontSize": 26,
+        "lineHeight": 1.25,
+        "color": "#FFFCFA"
+      },
+      "cta": {
+        "text": "See SailTru",
+        "placement": {
+          "x": 0.5,
+          "y": 0.74,
+          "width": 0.6,
+          "height": 0.08,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 20,
+        "fontSize": 28,
+        "minFontSize": 22,
+        "lineHeight": 1,
+        "color": "#FFFCFA",
+        "variant": "fill"
+      },
+      "showLogo": true,
+      "logoPlacement": {
+        "x": 0.5,
+        "y": 0.94,
+        "width": 0.5,
+        "height": 0.06,
+        "anchor": "bottom-center",
+        "safeInset": true
+      }
+    }
+  ],
+  "audio": {
+    "assetId": "bed-audio",
+    "startFrame": 12,
+    "trimStartSeconds": 0,
+    "volume": 0.22
+  }
+}

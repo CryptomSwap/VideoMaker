@@ -1,0 +1,3 @@
+This project is wired to TECHNICAL FIXTURES, not finished creative.
+Keep the scene ids (problem, connect) and asset ids (plate-still, plate-video, mark-logo, bed-audio).
+Import real files onto those ids, then edit copy in project.json.
