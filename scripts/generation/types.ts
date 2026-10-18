@@ -17,6 +17,7 @@ export type GenerationSettings = {
   prompt: string;
   preset: GenerationPreset | null;
   modelId: string;
+  seed: number | null;
 };
 
 export type GenerationJobRecord = {

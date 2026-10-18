@@ -17,13 +17,14 @@ export const FAL_PROVIDER_ID = "fal" as const;
 export const FAL_QUEUE_BASE = "https://queue.fal.run";
 
 export type GenerationPreset = "draft" | "final";
-export type GenerationModelId = "kling" | "hailuo-fast" | "ltx-fast";
+export type GenerationModelId = "kling" | "seedance" | "hailuo-fast" | "ltx-fast";
 
 export const KLING_V3_STANDARD_I2V_ENDPOINT =
   "fal-ai/kling-video/v3/standard/image-to-video";
 export const HAILUO_FAST_I2V_ENDPOINT =
   "fal-ai/minimax/hailuo-2.3-fast/standard/image-to-video";
 export const LTX_FAST_I2V_ENDPOINT = "fal-ai/ltx-2.3/image-to-video/fast";
+export const SEEDANCE_25_I2V_ENDPOINT = "bytedance/seedance-2.5/image-to-video";
 
 /** @deprecated Submit URL is per-model. Kept for tests that pin Kling. */
 export const FAL_QUEUE_SUBMIT_URL = `${FAL_QUEUE_BASE}/${KLING_V3_STANDARD_I2V_ENDPOINT}`;
@@ -35,6 +36,16 @@ export type KlingDurationSeconds = (typeof KLING_DURATION_SECONDS)[number];
 
 export const HAILUO_FAST_DURATION_SECONDS = [6, 10] as const;
 export const LTX_FAST_DURATION_SECONDS = [6, 8, 10, 12, 14, 16, 18, 20] as const;
+
+export const SEEDANCE_25_DURATION_SECONDS = [
+  4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+  25, 26, 27, 28, 29, 30,
+] as const;
+
+/** fal token billing: (h×w×duration×24)/1024 × $0.0214/1k tokens (720p-area estimate). */
+export const SEEDANCE_25_USD_PER_1K_TOKENS = 0.0214;
+export const SEEDANCE_25_DEFAULT_HEIGHT_PX = 1280;
+export const SEEDANCE_25_DEFAULT_WIDTH_PX = 720;
 
 export const COST_USD_PER_SECOND_AUDIO_OFF = 0.084;
 export const COST_USD_PER_SECOND_AUDIO_ON = 0.126;
@@ -64,6 +75,8 @@ export type FalI2vModel = {
   imageField: "start_image_url" | "image_url";
   supportsGenerateAudio: boolean;
   supportsSeed: boolean;
+  /** Send CLI --aspect to the provider (Seedance billing/framing). */
+  passRequestedAspectRatio: boolean;
   extraInput: Record<string, unknown>;
   estimateCostUsd: (durationSeconds: number) => number;
   costBasis: string;
@@ -94,6 +107,19 @@ export const estimateLtxFast1080pCostUsd = (durationSeconds: number): number => 
   return Math.round(durationSeconds * LTX_FAST_COST_USD_PER_SECOND_1080P * 1000) / 1000;
 };
 
+/** Conservative 720p portrait-area token estimate; fal’s table is authoritative. */
+export const estimateSeedance25CostUsd = (durationSeconds: number): number => {
+  const tokens =
+    (SEEDANCE_25_DEFAULT_HEIGHT_PX *
+      SEEDANCE_25_DEFAULT_WIDTH_PX *
+      durationSeconds *
+      24) /
+    1024;
+  return (
+    Math.round((tokens * SEEDANCE_25_USD_PER_1K_TOKENS) / 1000 * 1000) / 1000
+  );
+};
+
 export const GENERATION_MODELS: Record<GenerationModelId, FalI2vModel> = {
   kling: {
     id: "kling",
@@ -111,11 +137,41 @@ export const GENERATION_MODELS: Record<GenerationModelId, FalI2vModel> = {
     imageField: "start_image_url",
     supportsGenerateAudio: true,
     supportsSeed: false,
+    passRequestedAspectRatio: false,
     extraInput: {},
     estimateCostUsd: (durationSeconds) =>
       estimateKlingStandardCostUsd(durationSeconds, false),
     costBasis:
       `fal Kling v3 Standard i2v: $${COST_USD_PER_SECOND_AUDIO_OFF}/s with audio off (https://fal.ai/models/fal-ai/kling-video/v3/standard/image-to-video). This pipeline always sends generate_audio=false.`,
+  },
+  seedance: {
+    id: "seedance",
+    aliases: [
+      "seedance",
+      "seedance-2.5",
+      "seedance25",
+      "seedance-2.5-i2v",
+    ],
+    label: "Seedance 2.5 i2v",
+    endpoint: SEEDANCE_25_I2V_ENDPOINT,
+    docs: [
+      "https://fal.ai/models/bytedance/seedance-2.5/image-to-video/api",
+      "https://fal.ai/models/bytedance/seedance-2.5/image-to-video",
+      "https://fal.ai/docs/documentation/model-apis/inference/queue",
+    ],
+    durationSeconds: SEEDANCE_25_DURATION_SECONDS,
+    defaultDurationSeconds: 5,
+    durationAsString: true,
+    imageField: "image_url",
+    supportsGenerateAudio: true,
+    supportsSeed: true,
+    passRequestedAspectRatio: true,
+    extraInput: {
+      resolution: "720p",
+    },
+    estimateCostUsd: estimateSeedance25CostUsd,
+    costBasis:
+      `fal Seedance 2.5 i2v token estimate at 720p (${SEEDANCE_25_DEFAULT_WIDTH_PX}×${SEEDANCE_25_DEFAULT_HEIGHT_PX} area) with generate_audio=false (https://fal.ai/models/bytedance/seedance-2.5/image-to-video). Preview uses the published token formula; actual cost follows output resolution and aspect.`,
   },
   "hailuo-fast": {
     id: "hailuo-fast",
@@ -133,6 +189,7 @@ export const GENERATION_MODELS: Record<GenerationModelId, FalI2vModel> = {
     imageField: "image_url",
     supportsGenerateAudio: false,
     supportsSeed: false,
+    passRequestedAspectRatio: false,
     extraInput: {prompt_optimizer: false},
     estimateCostUsd: estimateHailuoFastCostUsd,
     costBasis:
@@ -154,6 +211,7 @@ export const GENERATION_MODELS: Record<GenerationModelId, FalI2vModel> = {
     imageField: "image_url",
     supportsGenerateAudio: true,
     supportsSeed: false,
+    passRequestedAspectRatio: false,
     extraInput: {
       resolution: "1080p",
       aspect_ratio: "auto",
@@ -185,7 +243,7 @@ export const parseGenerationModelId = (raw: string): GenerationModelId => {
     }
   }
   throw new Error(
-    `Unknown model "${raw}". Use kling | hailuo-fast | ltx-fast (aliases: minimax-turbo, ltx-2.3-fast).`,
+    `Unknown model "${raw}". Use kling | seedance | hailuo-fast | ltx-fast (aliases: seedance-2.5, minimax-turbo, ltx-2.3-fast).`,
   );
 };
 

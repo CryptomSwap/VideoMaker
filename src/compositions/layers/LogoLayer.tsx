@@ -1,15 +1,22 @@
 import React from "react";
 import {Img, staticFile} from "remotion";
+import {SailtruLogo} from "../../brand/SailtruLogo";
+import {sailtruLogoMono} from "../../brand/sailtru";
 import {assetUrl} from "../../pipeline/paths";
 import type {Placement, Project} from "../../pipeline/schema";
 import {findAsset} from "../../pipeline/timing";
+import {colors} from "../../tokens";
 import {resolvePlacement} from "./placement";
+
+const isSailtruBrandLogo = (logo: {id: string; src: string}) =>
+  logo.id === "sailtru-logo" || logo.src.includes("sailtru-logo");
 
 export const LogoLayer: React.FC<{
   project: Project;
   placement: Placement | null;
   fontFamily: string;
-}> = ({project, placement, fontFamily}) => {
+  heightPx?: number;
+}> = ({project, placement, heightPx}) => {
   const usedPlacement =
     placement ??
     ({
@@ -44,44 +51,32 @@ export const LogoLayer: React.FC<{
       }}
     >
       {logo ? (
-        <Img
-          src={staticFile(assetUrl(project.id, logo.src))}
-          name="Logo"
-          style={{height: 56, objectFit: "contain"}}
-        />
+        isSailtruBrandLogo(logo) ? (
+          <SailtruLogo
+            height={heightPx ?? 56}
+            mono={
+              project.brand.ink === colors.ink
+                ? sailtruLogoMono("light")
+                : project.brand.ink
+            }
+          />
+        ) : (
+          <Img
+            src={staticFile(assetUrl(project.id, logo.src))}
+            name="Logo"
+            style={{
+              height: heightPx ?? 56,
+              maxWidth: "100%",
+              objectFit: "contain",
+            }}
+          />
+        )
       ) : (
-        <Wordmark accent={project.brand.accent} ink={project.brand.ink} fontFamily={fontFamily} />
+        <SailtruLogo
+          height={heightPx ?? 56}
+          mono={sailtruLogoMono("light")}
+        />
       )}
-    </div>
-  );
-};
-
-const Wordmark: React.FC<{accent: string; ink: string; fontFamily: string}> = ({
-  accent,
-  ink,
-  fontFamily,
-}) => {
-  return (
-    <div style={{display: "flex", alignItems: "center", gap: 12}}>
-      <div
-        style={{
-          width: 16,
-          height: 16,
-          borderRadius: 4,
-          backgroundColor: accent,
-        }}
-      />
-      <div
-        style={{
-          fontFamily,
-          fontSize: 28,
-          fontWeight: 500,
-          letterSpacing: "0.08em",
-          color: ink,
-        }}
-      >
-        SailTru
-      </div>
     </div>
   );
 };

@@ -116,6 +116,8 @@ export const buildI2vInput = (options: {
   imageDataUri: string;
   prompt: string;
   durationSeconds: number;
+  aspectRatio?: `${number}:${number}`;
+  seed?: number | null;
 }): Record<string, unknown> => {
   const duration = options.model.durationAsString
     ? String(options.durationSeconds)
@@ -126,8 +128,14 @@ export const buildI2vInput = (options: {
     duration,
     ...options.model.extraInput,
   };
+  if (options.model.passRequestedAspectRatio && options.aspectRatio) {
+    body.aspect_ratio = options.aspectRatio;
+  }
   if (options.model.supportsGenerateAudio) {
     body.generate_audio = false;
+  }
+  if (options.model.supportsSeed && options.seed != null) {
+    body.seed = options.seed;
   }
   return body;
 };

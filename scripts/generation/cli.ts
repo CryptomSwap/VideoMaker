@@ -49,7 +49,7 @@ const usage = (): string => {
 
   Draft (cheap motion/composition):  --preset=draft     → hailuo-fast (alias minimax-turbo)
   Draft alt:                         --model=ltx-fast
-  Final (Kling until you pick a winner): --preset=final → kling
+  Final (plate i2v — pick one):  --preset=final --model=kling   |   --model=seedance
 
   npx tsx scripts/ad.ts generate preview --preset=draft --project=<id> --source=<imageAsset> --scene=<sceneId> --prompt-file=<utf8.txt> --aspect=9:16 --text-free
   npx tsx scripts/ad.ts generate submit  ...same flags... --execute
@@ -172,11 +172,6 @@ export const runGenerateCli = async (input: {
 
   const previewArgs = action === "preview" || action === "submit" ? rest : rest;
   if (action === "preview" || action === "submit") {
-    if (flagValue(previewArgs, "--seed")) {
-      throw new Error(
-        "Seed is not supported on the wired i2v models (kling, hailuo-fast, ltx-fast).",
-      );
-    }
     assertTextFree(hasFlag(previewArgs, "--text-free"));
     const projectId = flagValue(previewArgs, "--project");
     const source = flagValue(previewArgs, "--source");
@@ -190,6 +185,17 @@ export const runGenerateCli = async (input: {
       preset: presetRaw ? parseGenerationPreset(presetRaw) : null,
       modelId: modelRaw ? parseGenerationModelId(modelRaw) : null,
     });
+    const seedRaw = flagValue(previewArgs, "--seed");
+    if (seedRaw && !resolved.model.supportsSeed) {
+      throw new Error(
+        `Seed is only supported with --model=seedance (got ${resolved.model.id}).`,
+      );
+    }
+    const seed =
+      seedRaw == null ? null : Number(seedRaw);
+    if (seedRaw != null && (!Number.isInteger(seed) || seed < 0)) {
+      throw new Error(`--seed must be a non-negative integer. Got: ${seedRaw}`);
+    }
     const durationRaw =
       flagValue(previewArgs, "--duration") ??
       String(resolved.model.defaultDurationSeconds);
@@ -202,6 +208,7 @@ export const runGenerateCli = async (input: {
       prompt: readPrompt(previewArgs),
       durationSeconds: parseDurationForModel(durationRaw, resolved.model),
       aspectRatio: parseAspectRatio(flagValue(previewArgs, "--aspect") ?? "9:16"),
+      seed,
       model: resolved.model,
       preset: resolved.preset,
     });

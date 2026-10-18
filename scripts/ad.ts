@@ -296,19 +296,31 @@ type ValidationExit = 0 | 1;
 
 const reviewFrames = (project: Project): Array<{name: string; frame: number}> => {
   const frames: Array<{name: string; frame: number}> = [];
+  const seen = new Set<number>();
+  const pushFrame = (name: string, frame: number) => {
+    const clamped = Math.max(0, Math.min(frame, totalDurationInFrames(project) - 1));
+    if (seen.has(clamped) && name.startsWith("review-f")) {
+      return;
+    }
+    seen.add(clamped);
+    frames.push({name, frame: clamped});
+  };
+
   let cursor = 0;
   project.scenes.forEach((scene, index) => {
     const local = Math.min(20, Math.max(1, scene.durationInFrames - 1));
-    frames.push({
-      name: `review-${String(index + 1).padStart(2, "0")}-scene-${scene.id}.png`,
-      frame: cursor + local,
-    });
+    pushFrame(
+      `review-${String(index + 1).padStart(2, "0")}-scene-${scene.id}.png`,
+      cursor + local,
+    );
     cursor += scene.durationInFrames;
   });
-  frames.push({
-    name: "review-end.png",
-    frame: Math.max(0, totalDurationInFrames(project) - 1),
-  });
+  pushFrame("review-end.png", Math.max(0, totalDurationInFrames(project) - 1));
+
+  for (const frame of project.reviewFrames ?? []) {
+    pushFrame(`review-f${String(frame).padStart(3, "0")}.png`, frame);
+  }
+
   return frames;
 };
 

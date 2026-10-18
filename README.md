@@ -98,7 +98,8 @@ Same fal queue we already wired. Do **not** rebuild this as a “direct API” t
 | --- | --- | --- | --- | --- |
 | `draft` | MiniMax Hailuo 2.3 Fast (`hailuo-fast`, alias `minimax-turbo`) | `fal-ai/minimax/hailuo-2.3-fast/standard/image-to-video` | **$0.19 / 6s**, $0.32 / 10s | 6, 10 |
 | `draft` alt | LTX-2.3 Fast (`--model=ltx-fast`) | `fal-ai/ltx-2.3/image-to-video/fast` | **~$0.06/s** 1080p (fal table also lists $0.04/s) | 6, 8, 10 here (24fps) |
-| `final` | Kling v3 Standard (`kling`) until a winner is picked | `fal-ai/kling-video/v3/standard/image-to-video` | **$0.084/s** | 3–15 |
+| `final` | Kling v3 Standard (`--model=kling`, default) | `fal-ai/kling-video/v3/standard/image-to-video` | **$0.084/s** | 3–15 |
+| `final` | Seedance 2.5 (`--model=seedance`) | `bytedance/seedance-2.5/image-to-video` | **token-based** (preview estimates 720p) | 4–30 |
 
 Auth: `FAL_KEY` in `.env` (`Authorization: Key $FAL_KEY`). Never in `public/`, `project.json`, or manifests. Queue: [submit / status / result / cancel](https://fal.ai/docs/documentation/model-apis/inference/queue). Jobs: `var/generation-jobs/` (gitignored).
 
@@ -114,7 +115,7 @@ Copy `.env.example` → `.env`. Key: [fal dashboard](https://fal.ai/dashboard/ke
 npx tsx scripts/ad.ts generate preview --preset=draft --project=sailtru-first-ad --source=plate-still --scene=connect --prompt-file=examples/motion-prompt.txt --aspect=9:16 --text-free
 ```
 
-`--model=ltx-fast` to A/B LTX. `--preset=final` (or `--model=kling`) for Kling. Paid submit requires `--execute`. Duplicates of the same source hash + prompt + duration + **model** + scene need `--new-take`. `submission-unknown` means do **not** submit again — check the fal dashboard.
+`--model=ltx-fast` to A/B LTX. Final plate motion: `--preset=final --model=kling` or `--model=seedance` (optional `--seed` on Seedance). Paid submit requires `--execute`. Duplicates of the same source hash + prompt + duration + **model** + scene need `--new-take`. `submission-unknown` means do **not** submit again — check the fal dashboard.
 
 ```bat
 npx tsx scripts/ad.ts generate submit --preset=draft --project=sailtru-first-ad --source=plate-still --scene=connect --prompt-file=examples/motion-prompt.txt --aspect=9:16 --text-free --execute

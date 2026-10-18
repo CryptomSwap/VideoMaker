@@ -7,7 +7,7 @@ export const COPY = {
   headlineLines: ["Still doing this", "manually?"],
   wordmark: "SailTru",
   wordmarkNote:
-    "Temporary wordmark. Replace with the SailTru logo when the asset is in this repo.",
+    "Official lockup via SailtruLogo in compositions; this string is metadata only.",
 };
 
 export const STEPS = [

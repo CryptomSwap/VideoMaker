@@ -6,6 +6,9 @@
  *
  * - Instrument Serif: https://fonts.google.com/specimen/Instrument+Serif
  * - IBM Plex Sans: https://fonts.google.com/specimen/IBM+Plex+Sans
+ * - Heebo: https://fonts.google.com/specimen/Heebo
+ *
+ * Heebo is the motion-template face. Existing projects keep their current fonts.
  */
 export const FONT_CATALOG = {
   "instrument-serif": {
@@ -17,6 +20,11 @@ export const FONT_CATALOG = {
     cssName: "IBM Plex Sans",
     license: "SIL Open Font License 1.1",
     source: "Google Fonts via @remotion/google-fonts/IBMPlexSans",
+  },
+  heebo: {
+    cssName: "Heebo",
+    license: "SIL Open Font License 1.1",
+    source: "Google Fonts via @remotion/google-fonts/Heebo",
   },
 } as const;
 

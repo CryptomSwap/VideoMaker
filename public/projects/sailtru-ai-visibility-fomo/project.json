@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "id": "sailtru-ai-visibility-fomo",
+  "title": "SailTru — AI Visibility FOMO",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "brand": {
+    "paper": "#091322",
+    "ink": "#FFFFFF",
+    "accent": "#3B63FF",
+    "headlineFont": "ibm-plex-sans",
+    "bodyFont": "ibm-plex-sans",
+    "logoAssetId": "sailtru-logo"
+  },
+  "safeArea": {
+    "top": 180,
+    "bottom": 280,
+    "left": 72,
+    "right": 100
+  },
+  "assets": [
+    {
+      "id": "hook-background",
+      "kind": "image",
+      "src": "assets/hook-background.png",
+      "originalName": "hook-background.png",
+      "width": 941,
+      "height": 1672,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:08.179Z"
+    },
+    {
+      "id": "value-background",
+      "kind": "image",
+      "src": "assets/value-background.png",
+      "originalName": "value-background.png",
+      "width": 941,
+      "height": 1672,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:09.922Z"
+    },
+    {
+      "id": "cta-background",
+      "kind": "image",
+      "src": "assets/cta-background.png",
+      "originalName": "cta-background.png",
+      "width": 941,
+      "height": 1672,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:11.617Z"
+    },
+    {
+      "id": "chatgpt-logo",
+      "kind": "logo",
+      "src": "assets/chatgpt-logo.png",
+      "originalName": "OpenAI-white-monoblossom.png",
+      "width": 721,
+      "height": 721,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:40.646Z"
+    },
+    {
+      "id": "google-logo",
+      "kind": "logo",
+      "src": "assets/google-logo.png",
+      "originalName": "googleg_standard_color_128dp.png",
+      "width": 256,
+      "height": 256,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:42.739Z"
+    },
+    {
+      "id": "claude-logo",
+      "kind": "logo",
+      "src": "assets/claude-logo.svg",
+      "originalName": "Claude_AI_symbol.svg",
+      "width": null,
+      "height": null,
+      "durationInSeconds": null,
+      "importedAt": "2026-10-16T19:18:43.775Z"
+    },
+    {
+      "id": "sailtru-logo",
+      "kind": "logo",
+      "src": "assets/sailtru-logo.png",
+      "originalName": "derived-knockout-from-sailtru-logo-original.png",
+      "width": 961,
+      "height": 293,
+      "durationInSeconds": 0.04,
+      "importedAt": "2026-10-16T19:18:45.871Z"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook",
+      "durationInFrames": 75,
+      "background": {
+        "type": "image",
+        "assetId": "hook-background",
+        "crop": {
+          "x": 0.5,
+          "y": 0.42,
+          "zoom": 1
+        },
+        "stillPanZoom": {
+          "fromZoom": 1,
+          "toZoom": 1.035,
+          "fromX": 0.5,
+          "fromY": 0.4,
+          "toX": 0.5,
+          "toY": 0.46
+        }
+      },
+      "contrast": {
+        "scrim": "top",
+        "color": "#091322",
+        "opacity": 0.28
+      },
+      "headline": {
+        "text": "What does",
+        "placement": {
+          "x": 0.5,
+          "y": 0.08,
+          "width": 0.86,
+          "height": 0.1,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "none",
+        "delayFrames": 0,
+        "fontSize": 64,
+        "minFontSize": 44,
+        "lineHeight": 1,
+        "color": "#FFFFFF"
+      },
+      "supporting": {
+        "text": "say about your business?",
+        "placement": {
+          "x": 0.5,
+          "y": 0.36,
+          "width": 0.86,
+          "height": 0.16,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "none",
+        "delayFrames": 0,
+        "fontSize": 58,
+        "minFontSize": 40,
+        "lineHeight": 1.08,
+        "color": "#FFFFFF"
+      },
+      "cta": null,
+      "showLogo": false,
+      "logoPlacement": null,
+      "providerRotation": {
+        "transitionFrames": 5,
+        "placement": {
+          "x": 0.5,
+          "y": 0.2,
+          "width": 0.9,
+          "height": 0.14,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "fontSize": 88,
+        "color": "#FFFFFF",
+        "providers": [
+          {
+            "id": "chatgpt",
+            "label": "ChatGPT",
+            "logoAssetId": "chatgpt-logo",
+            "startFrame": 0,
+            "endFrame": 22,
+            "logoDisplayHeight": 70
+          },
+          {
+            "id": "google",
+            "label": "Google",
+            "logoAssetId": "google-logo",
+            "startFrame": 22,
+            "endFrame": 44,
+            "logoDisplayHeight": 58
+          },
+          {
+            "id": "claude",
+            "label": "Claude",
+            "logoAssetId": "claude-logo",
+            "startFrame": 44,
+            "endFrame": 75,
+            "logoDisplayHeight": 68
+          }
+        ]
+      }
+    },
+    {
+      "id": "value",
+      "durationInFrames": 90,
+      "background": {
+        "type": "image",
+        "assetId": "value-background",
+        "crop": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1
+        },
+        "stillPanZoom": {
+          "fromZoom": 1,
+          "toZoom": 1.045,
+          "fromX": 0.5,
+          "fromY": 0.46,
+          "toX": 0.5,
+          "toY": 0.52
+        }
+      },
+      "contrast": {
+        "scrim": "top",
+        "color": "#091322",
+        "opacity": 0.34
+      },
+      "headline": {
+        "text": "Find what's missing.\nFix what matters.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.08,
+          "width": 0.88,
+          "height": 0.24,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "rise",
+        "delayFrames": 2,
+        "fontSize": 72,
+        "minFontSize": 48,
+        "lineHeight": 1.05,
+        "color": "#FFFFFF"
+      },
+      "supporting": {
+        "text": "SEO · GEO · Custom AI Solutions",
+        "placement": {
+          "x": 0.5,
+          "y": 0.205,
+          "width": 0.88,
+          "height": 0.08,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 8,
+        "fontSize": 30,
+        "minFontSize": 24,
+        "lineHeight": 1.2,
+        "color": "#FFFFFF"
+      },
+      "cta": null,
+      "showLogo": false,
+      "logoPlacement": null
+    },
+    {
+      "id": "cta",
+      "durationInFrames": 75,
+      "background": {
+        "type": "image",
+        "assetId": "cta-background",
+        "crop": {
+          "x": 0.5,
+          "y": 0.42,
+          "zoom": 1.04
+        },
+        "stillPanZoom": {
+          "fromZoom": 1,
+          "toZoom": 1.03,
+          "fromX": 0.5,
+          "fromY": 0.4,
+          "toX": 0.5,
+          "toY": 0.46
+        }
+      },
+      "contrast": {
+        "scrim": "full",
+        "color": "#091322",
+        "opacity": 0.42
+      },
+      "headline": {
+        "text": "See what your business should improve next.",
+        "placement": {
+          "x": 0.5,
+          "y": 0.22,
+          "width": 0.86,
+          "height": 0.22,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "rise",
+        "delayFrames": 4,
+        "fontSize": 58,
+        "minFontSize": 40,
+        "lineHeight": 1.12,
+        "color": "#FFFFFF"
+      },
+      "supporting": null,
+      "cta": {
+        "text": "Start diagnosis",
+        "placement": {
+          "x": 0.5,
+          "y": 0.78,
+          "width": 0.78,
+          "height": 0.1,
+          "anchor": "top-center",
+          "safeInset": true
+        },
+        "animation": "fade",
+        "delayFrames": 4,
+        "fontSize": 38,
+        "minFontSize": 28,
+        "lineHeight": 1,
+        "color": "#FFFFFF",
+        "variant": "fill",
+        "pulse": true
+      },
+      "showLogo": true,
+      "logoHeightPx": 78,
+      "logoPlacement": {
+        "x": 0.5,
+        "y": 0.1,
+        "width": 0.72,
+        "height": 0.1,
+        "anchor": "top-center",
+        "safeInset": true
+      }
+    }
+  ],
+  "audio": null,
+  "reviewFrames": [0, 10, 23, 33, 45, 55, 70, 90, 120, 150, 175, 205, 225, 239]
+}

@@ -59,7 +59,7 @@ export type PreviewPlan = {
     aspectRatio: `${number}:${number}`;
     generateAudio: false;
     prompt: string;
-    seed: null;
+    seed: number | null;
     extraInput: Record<string, unknown>;
   };
   output: {
@@ -95,6 +95,7 @@ export const buildPreview = (input: {
   prompt: string;
   durationSeconds: number;
   aspectRatio: `${number}:${number}`;
+  seed?: number | null;
   model?: FalI2vModel;
   preset?: GenerationPreset | null;
 }): PreviewPlan => {
@@ -177,7 +178,7 @@ export const buildPreview = (input: {
       aspectRatio: input.aspectRatio,
       generateAudio: false,
       prompt: input.prompt,
-      seed: null,
+      seed: input.seed ?? null,
       extraInput: model.extraInput,
     },
     output: {
@@ -186,7 +187,9 @@ export const buildPreview = (input: {
       aspect:
         model.id === "ltx-fast"
           ? "aspect_ratio=auto (follows start image)"
-          : "follows start image (no aspect_ratio field)",
+          : model.passRequestedAspectRatio
+            ? `aspect_ratio=${input.aspectRatio} (sent to provider)`
+            : "follows start image (no aspect_ratio field)",
       audio: model.supportsGenerateAudio
         ? "generate_audio=false; do not enable in the ad"
         : "model has no generate_audio field; mute the scene anyway",
@@ -212,7 +215,11 @@ export const formatPreview = (plan: PreviewPlan): string => {
     `Prompt: ${plan.settings.prompt}`,
     `Duration: ${plan.settings.durationSeconds}s`,
     `Requested aspect: ${plan.settings.aspectRatio} (${plan.output.aspect})`,
-    `Seed: not supported on ${plan.model}`,
+    plan.settings.seed != null
+      ? `Seed: ${plan.settings.seed}`
+      : GENERATION_MODELS[plan.modelId].supportsSeed
+        ? "Seed: (none — optional --seed)"
+        : `Seed: not supported on ${plan.modelId}`,
     `Audio: ${plan.output.audio}`,
     `Expected output: ${plan.output.format}; ${plan.output.fps}`,
     `Estimated cost: $${plan.estimatedCostUsd.toFixed(3)} USD`,
@@ -262,6 +269,7 @@ export const submitJob = async (input: {
       prompt: input.plan.settings.prompt,
       preset: input.plan.preset,
       modelId: input.plan.modelId,
+      seed: input.plan.settings.seed,
     },
     textFreeAttestation: true,
     status: "submitting",
@@ -285,6 +293,8 @@ export const submitJob = async (input: {
     imageDataUri: imageDataUri(imageBytes, path.extname(input.plan.sourcePath)),
     prompt: input.plan.settings.prompt,
     durationSeconds: input.plan.settings.durationSeconds,
+    aspectRatio: input.plan.settings.aspectRatio,
+    seed: input.plan.settings.seed,
   });
 
   try {

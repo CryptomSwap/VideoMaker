@@ -8,6 +8,8 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import {SailtruLogo} from "./brand/SailtruLogo";
+import {sailtruLogoMono} from "./brand/sailtru";
 import {fonts} from "./fonts";
 import {
   BEATS,
@@ -298,23 +300,10 @@ export const SailTruManualWork: React.FC<Props> = ({headline}) => {
             ),
           }}
         >
-          <div
-            style={{
-              width: 16,
-              height: 16,
-              borderRadius: 4,
-              backgroundColor: colors.blue,
-            }}
+          <SailtruLogo
+            height={type.wordmark * 1.35}
+            mono={sailtruLogoMono("light")}
           />
-          <div
-            style={{
-              fontSize: type.wordmark,
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-            }}
-          >
-            {COPY.wordmark}
-          </div>
         </Interactive.Div>
       </AbsoluteFill>
     </AbsoluteFill>

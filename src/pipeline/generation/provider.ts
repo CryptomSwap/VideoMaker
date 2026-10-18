@@ -2,7 +2,7 @@
  * Image-to-video provider contract.
  *
  * Live implementation: fal.ai queue from Node CLI (`scripts/generation`).
- * Models: hailuo-fast / ltx-fast (draft), kling (final until a winner is picked).
+ * Models: hailuo-fast / ltx-fast (draft), kling | seedance (final-quality i2v on fal).
  * Keep credentials out of public/, project JSON, browser code, and manifests.
  *
  * Contract:

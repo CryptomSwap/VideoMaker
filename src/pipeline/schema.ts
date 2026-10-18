@@ -83,6 +83,8 @@ export const copyBlockSchema = z.object({
 
 export const ctaBlockSchema = copyBlockSchema.extend({
   variant: z.enum(["fill", "outline"]),
+  /** Subtle glow/scale after the CTA is on screen. Omitted on existing projects. */
+  pulse: z.boolean().optional(),
 });
 
 export const imageBackgroundSchema = z.object({
@@ -130,6 +132,28 @@ export const assetSchema = z.object({
   importedAt: z.string(),
 });
 
+export const providerItemSchema = z.object({
+  id: z
+    .string()
+    .regex(/^[a-z][a-z0-9-]*$/, "Provider IDs are lowercase kebab-case"),
+  label: z.string().min(1),
+  logoAssetId: assetIdSchema,
+  /** Inclusive. */
+  startFrame: z.number().int().min(0),
+  /** Exclusive. */
+  endFrame: z.number().int().positive(),
+  /** Rendered logo height in px. Size by appearance, not intrinsic pixels. */
+  logoDisplayHeight: z.number().positive().optional(),
+});
+
+export const providerRotationSchema = z.object({
+  transitionFrames: z.number().int().min(1).max(12),
+  placement: placementSchema,
+  fontSize: z.number().positive(),
+  color: hexColor.nullable(),
+  providers: z.array(providerItemSchema).min(1),
+});
+
 export const sceneSchema = z.object({
   id: sceneIdSchema,
   durationInFrames: z.number().int().positive(),
@@ -140,6 +164,13 @@ export const sceneSchema = z.object({
   cta: ctaBlockSchema.nullable(),
   showLogo: z.boolean(),
   logoPlacement: placementSchema.nullable(),
+  /** Optional; defaults to 56px in LogoLayer when omitted. */
+  logoHeightPx: z.number().positive().optional(),
+  /**
+   * Within-scene provider name/logo rotation.
+   * Omitted on existing projects.
+   */
+  providerRotation: providerRotationSchema.optional(),
 });
 
 export const audioTrackSchema = z.object({
@@ -160,8 +191,8 @@ export const brandSchema = z.object({
   paper: hexColor,
   ink: hexColor,
   accent: hexColor,
-  headlineFont: z.enum(["instrument-serif", "ibm-plex-sans"]),
-  bodyFont: z.enum(["instrument-serif", "ibm-plex-sans"]),
+  headlineFont: z.enum(["instrument-serif", "ibm-plex-sans", "heebo"]),
+  bodyFont: z.enum(["instrument-serif", "ibm-plex-sans", "heebo"]),
   logoAssetId: assetIdSchema.nullable(),
 });
 
@@ -177,6 +208,8 @@ export const projectSchema = z.object({
   assets: z.array(assetSchema),
   scenes: z.array(sceneSchema).min(1),
   audio: audioTrackSchema.nullable(),
+  /** Extra Studio/export stills, in addition to the default per-scene frames. */
+  reviewFrames: z.array(z.number().int().min(0)).optional(),
 });
 
 export type Project = z.infer<typeof projectSchema>;
@@ -188,6 +221,8 @@ export type Placement = z.infer<typeof placementSchema>;
 export type Crop = z.infer<typeof cropSchema>;
 export type StillPanZoom = z.infer<typeof stillPanZoomSchema>;
 export type AudioTrack = z.infer<typeof audioTrackSchema>;
+export type ProviderItem = z.infer<typeof providerItemSchema>;
+export type ProviderRotation = z.infer<typeof providerRotationSchema>;
 
 export class ProjectValidationError extends Error {
   issues: string[];

@@ -24,11 +24,13 @@ import {
   estimateHailuoFastCostUsd,
   estimateKlingStandardCostUsd,
   estimateLtxFast1080pCostUsd,
+  estimateSeedance25CostUsd,
   GENERATION_MODELS,
   HAILUO_FAST_I2V_ENDPOINT,
   KLING_V3_STANDARD_I2V_ENDPOINT,
   LTX_FAST_I2V_ENDPOINT,
   PRESET_DEFAULT_MODEL,
+  SEEDANCE_25_I2V_ENDPOINT,
 } from "../src/pipeline/generation/spec";
 
 const tmpWorkspace = (): string => {
@@ -251,6 +253,28 @@ test("kling i2v request body is the documented fields only", () => {
   assert.equal(KLING_V3_STANDARD_I2V_ENDPOINT, "fal-ai/kling-video/v3/standard/image-to-video");
   assert.equal(estimateKlingStandardCostUsd(5, false), 0.42);
   assert.equal(COST_USD_PER_SECOND_AUDIO_OFF, 0.084);
+});
+
+test("seedance i2v request body matches fal fields", () => {
+  const body = buildI2vInput({
+    model: GENERATION_MODELS.seedance,
+    imageDataUri: "data:image/png;base64,bbb",
+    prompt: "slow push-in, locked horizon",
+    durationSeconds: 8,
+    aspectRatio: "9:16",
+    seed: 42,
+  });
+  assert.deepEqual(body, {
+    image_url: "data:image/png;base64,bbb",
+    prompt: "slow push-in, locked horizon",
+    duration: "8",
+    resolution: "720p",
+    aspect_ratio: "9:16",
+    generate_audio: false,
+    seed: 42,
+  });
+  assert.equal(SEEDANCE_25_I2V_ENDPOINT, "bytedance/seedance-2.5/image-to-video");
+  assert.equal(estimateSeedance25CostUsd(5), 2.311);
 });
 
 test("draft/final presets and cheaper model request bodies", () => {
@@ -652,15 +676,17 @@ test("download failure can retry without regeneration", async () => {
   assert.equal(submits, 1);
 });
 
-test("seed flag is rejected", async () => {
+test("--seed is rejected on kling and accepted on seedance", async () => {
   const root = tmpWorkspace();
   seedProject(root);
+  const io = ioFor(root);
   await assert.rejects(
     () =>
       runGenerateCli({
         workspaceRoot: root,
         args: [
           "preview",
+          "--model=kling",
           "--project=look-test",
           "--source=plate-still",
           "--scene=connect",
@@ -670,10 +696,26 @@ test("seed flag is rejected", async () => {
           "--text-free",
           "--seed=1",
         ],
-        io: ioFor(root),
+        io,
       }),
-    /Seed is not/,
+    /only supported with --model=seedance/,
   );
+  await runGenerateCli({
+    workspaceRoot: root,
+    args: [
+      "preview",
+      "--model=seedance",
+      "--project=look-test",
+      "--source=plate-still",
+      "--scene=connect",
+      "--prompt=x",
+      "--duration=5",
+      "--aspect=9:16",
+      "--text-free",
+      "--seed=1",
+    ],
+    io,
+  });
 });
 
 test("assign refuses to silently freeze a short clip", async () => {
@@ -717,6 +759,7 @@ test("assign refuses to silently freeze a short clip", async () => {
       prompt: "MOCK",
       preset: null,
       modelId: "kling",
+      seed: null,
     },
     textFreeAttestation: true,
     status: "succeeded",
@@ -788,6 +831,20 @@ test("draft preset uses hailuo-fast; fingerprints differ by model; ltx duration 
     preset: "final",
   });
   assert.notEqual(hailuo.fingerprint, kling.fingerprint);
+  const seedance = buildPreview({
+    workspaceRoot: root,
+    io,
+    projectId: "look-test",
+    sceneId: "connect",
+    sourceAssetId: "plate-still",
+    prompt: "mug steam, locked camera",
+    durationSeconds: 6,
+    aspectRatio: "9:16",
+    model: GENERATION_MODELS.seedance,
+    preset: "final",
+  });
+  assert.equal(seedance.model, SEEDANCE_25_I2V_ENDPOINT);
+  assert.notEqual(kling.fingerprint, seedance.fingerprint);
   assert.throws(
     () =>
       buildPreview({
@@ -804,6 +861,48 @@ test("draft preset uses hailuo-fast; fingerprints differ by model; ltx duration 
       }),
     /6, 10/,
   );
+});
+
+test("CLI --model=seedance submits to Seedance 2.5 i2v", async () => {
+  const root = tmpWorkspace();
+  seedProject(root);
+  let endpoint = "";
+  let body: Record<string, unknown> = {};
+  const fal = mockFal({
+    submit: async (submittedEndpoint, input) => {
+      endpoint = submittedEndpoint;
+      body = input;
+      return {
+        request_id: "req-seedance",
+        status_url: "https://queue.fal.run/mock/status",
+        response_url: "https://queue.fal.run/mock/result",
+        cancel_url: "https://queue.fal.run/mock/cancel",
+      };
+    },
+  });
+  await runGenerateCli({
+    workspaceRoot: root,
+    args: [
+      "submit",
+      "--preset=final",
+      "--model=seedance",
+      "--project=look-test",
+      "--source=plate-still",
+      "--scene=connect",
+      "--prompt=slow drift",
+      "--duration=5",
+      "--aspect=9:16",
+      "--text-free",
+      "--execute",
+    ],
+    io: ioFor(root),
+    fal,
+  });
+  assert.equal(endpoint, SEEDANCE_25_I2V_ENDPOINT);
+  assert.equal(body.duration, "5");
+  assert.equal(body.aspect_ratio, "9:16");
+  assert.equal(body.resolution, "720p");
+  assert.equal(body.generate_audio, false);
 });
 
 test("CLI --preset=draft submits to hailuo-fast, not kling", async () => {

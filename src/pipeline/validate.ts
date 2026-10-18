@@ -288,7 +288,101 @@ export const validateProject = async (
     checkCopy(issues, project, `${path}.headline`, scene.headline);
     checkCopy(issues, project, `${path}.supporting`, scene.supporting);
     checkCopy(issues, project, `${path}.cta`, scene.cta);
+
+    if (scene.providerRotation) {
+      const rotation = scene.providerRotation;
+      const rotPath = `${path}.providerRotation`;
+      rotation.providers.forEach((provider, providerIndex) => {
+        if (provider.endFrame <= provider.startFrame) {
+          push(
+            issues,
+            "error",
+            `${rotPath}.providers[${providerIndex}].endFrame`,
+            "endFrame must be greater than startFrame",
+          );
+        }
+        if (provider.endFrame > scene.durationInFrames) {
+          push(
+            issues,
+            "error",
+            `${rotPath}.providers[${providerIndex}].endFrame`,
+            `endFrame ${provider.endFrame} exceeds scene duration ${scene.durationInFrames}`,
+          );
+        }
+        const logo = findAsset(project, provider.logoAssetId);
+        if (!logo) {
+          push(
+            issues,
+            "error",
+            `${rotPath}.providers[${providerIndex}].logoAssetId`,
+            `Logo asset "${provider.logoAssetId}" is not in the asset list`,
+          );
+        } else if (logo.kind !== "logo" && logo.kind !== "image") {
+          push(
+            issues,
+            "error",
+            `${rotPath}.providers[${providerIndex}].logoAssetId`,
+            "Provider logos must be kind logo or image",
+          );
+        }
+      });
+
+      if (rotation.providers[0]?.startFrame !== 0) {
+        push(
+          issues,
+          "error",
+          `${rotPath}.providers[0].startFrame`,
+          "First provider must start at frame 0 so the hook is readable immediately",
+        );
+      }
+
+      const last = rotation.providers[rotation.providers.length - 1];
+      if (last && last.endFrame !== scene.durationInFrames) {
+        push(
+          issues,
+          "error",
+          `${rotPath}.providers[${rotation.providers.length - 1}].endFrame`,
+          `Last provider must hold through the scene end (${scene.durationInFrames}), not leave a blank slot`,
+        );
+      }
+
+      for (let i = 1; i < rotation.providers.length; i++) {
+        const prev = rotation.providers[i - 1];
+        const current = rotation.providers[i];
+        if (current.startFrame !== prev.endFrame) {
+          push(
+            issues,
+            "error",
+            `${rotPath}.providers[${i}].startFrame`,
+            `Provider ranges must be contiguous (expected ${prev.endFrame}, got ${current.startFrame})`,
+          );
+        }
+      }
+
+      if (rotation.transitionFrames >= scene.durationInFrames) {
+        push(
+          issues,
+          "error",
+          `${rotPath}.transitionFrames`,
+          "transitionFrames must be shorter than the scene",
+        );
+      }
+    }
   });
+
+  if (project.reviewFrames) {
+    const total = project.scenes.reduce((sum, scene) => sum + scene.durationInFrames, 0);
+    project.reviewFrames.forEach((frame, index) => {
+      if (frame >= total) {
+        push(
+          issues,
+          "error",
+          `reviewFrames[${index}]`,
+          `Frame ${frame} is outside the ${total}-frame composition`,
+        );
+      }
+    });
+  }
 
   return {
     ok: issues.filter((issue) => issue.level === "error").length === 0,

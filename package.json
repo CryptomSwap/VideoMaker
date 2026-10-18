@@ -8,6 +8,7 @@
   "dependencies": {
     "@remotion/cli": "4.0.535",
     "@remotion/google-fonts": "4.0.535",
+    "@remotion/transitions": "4.0.535",
     "@remotion/zod-types": "4.0.535",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -28,7 +29,7 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "test": "tsx --test tests/pipeline.test.ts tests/generation.test.ts",
+    "test": "tsx --test tests/pipeline.test.ts tests/generation.test.ts tests/provider-rotation.test.ts tests/search-fomo-v2.test.ts tests/search-fomo-v3.test.ts tests/search-fomo-v4.test.ts tests/imessage-hook.test.ts",
     "ad": "tsx scripts/ad.ts",
     "ad:create": "tsx scripts/ad.ts create",
     "ad:import": "tsx scripts/ad.ts import",
@@ -39,6 +40,9 @@
     "ad:first": "tsx scripts/ad.ts setup-first-ad",
     "ad:generate": "tsx scripts/ad.ts generate",
     "render": "remotion render SailTruManualWork out/sailtru-manual-work.mp4",
+    "render:imessage-hook": "remotion render IMessageHook out/imessage-hook/imessage-hook.mp4",
+    "render:search-fomo-v4": "remotion render SearchFomoV4 out/search-fomo-v4/search-fomo-v4.mp4",
+    "render:search-fomo-v3": "remotion render SearchFomoV3 out/search-fomo-v3/search-fomo-v3.mp4",
     "stills": "remotion still SailTruManualWork out/review-opening.png --frame=18 && remotion still SailTruManualWork out/review-midpoint.png --frame=88 && remotion still SailTruManualWork out/review-ending.png --frame=142"
   }
 }
